@@ -7,6 +7,8 @@ const pool = new Pool({
   database: "bootcampx",
 });
 
+const input = process.argv[2];
+
 pool
   .query(
     `SELECT DISTINCT teachers.name as teacher, cohorts.name as cohort
@@ -14,8 +16,9 @@ pool
       JOIN assistance_requests ON teachers.id = teacher_id
       JOIN students ON students.id = student_id
       JOIN cohortS ON cohorts.id = cohort_id
-      WHERE cohorts.name = '${process.argv[2]}' 
-      ORDER BY teachers.name;`
+      WHERE cohorts.name = $1 
+      ORDER BY teachers.name;`,
+    [input]
   )
   .then((res) => {
     console.log("connected");
